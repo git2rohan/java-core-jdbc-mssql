@@ -1,0 +1,5 @@
+{
+	"server":"jdbc:sqlserver://rohan-pc\\sqlexpress",
+	"username" : "rsoudey",
+	"password" : "Pass@12345"
+}
