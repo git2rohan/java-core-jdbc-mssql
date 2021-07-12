@@ -25,7 +25,7 @@ public class Main {
 			//Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");	
 			//in JDBC 4.0 no need to register driver explicitly
 			
-			Connection conn = DriverManager.getConnection("jdbc:sqlserver://*****-*****\\******","*****","*****");
+			Connection conn = DriverManager.getConnection("jdbc:sqlserver://rohan-pc\\******","*****","*****");
 			System.out.println("tested successful..");
 			
 			Main main = new Main();
