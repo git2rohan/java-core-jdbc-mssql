@@ -1,14 +1,17 @@
 package com.main;
 
+import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 public class Main {
 	
@@ -22,13 +25,19 @@ public class Main {
 		//STEP = 5 Close connection		
 		try {
 			
+			Main main = new Main();
+			
 			//Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");	
 			//in JDBC 4.0 no need to register driver explicitly
 			
-			Connection conn = DriverManager.getConnection("jdbc:sqlserver://rohan-pc\\******","*****","*****");
+			//fetch server conf
+			Map<String, String> conf = main.readSQLconfig();
+			
+			
+			Connection conn = DriverManager.getConnection(conf.get("server"),conf.get("username"),conf.get("password"));
 			System.out.println("tested successful..");
 			
-			Main main = new Main();
+			
 			//user input
 			Scanner scanner = new Scanner(System.in);
 			Map<String, String> map = main.register(scanner);
@@ -162,5 +171,39 @@ public class Main {
 		}
 		
 		return 0;
+	}
+	
+	public Map<String, String> readSQLconfig()
+	{
+		
+//      create a config-server.json file in src with below blueprint
+//		{
+//			"server":"jdbc:sqlserver://pcname\\sql-instance-name",
+//			"username" : "username",
+//			"password" : "pass"
+//		}
+		JSONParser parser = new JSONParser();
+		
+		try {
+			Object obj = parser.parse(new FileReader("src/config-server.json"));
+			JSONObject json = (JSONObject)obj;
+			String server = (String)json.get("server");
+			String username = (String)json.get("username");
+			String password = (String)json.get("password");
+			
+			Map<String, String> map = new HashMap<>();
+			map.put("server", server);
+			map.put("username", username);
+			map.put("password", password);
+			
+			return map;
+			
+		} 
+		catch(Exception ex) 
+		{
+			ex.printStackTrace();
+		}
+		
+		return null;
 	}
 }
